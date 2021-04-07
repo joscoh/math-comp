@@ -268,12 +268,8 @@ do 2?case: insubP; rewrite //= ?eqxx ?oner_eq0 // => u _ hu _.
 by congr \pi; apply: val_inj; rewrite /= hu.
 Qed.
 
-End FracField.
-End FracField.
-(* STOP
-
-(* fractions form a ring with explicit unit *)
-Definition RatFieldUnitMixin := FieldUnitMixin mulV_l inv0.
+(* (* fractions form a ring with explicit unit *)
+Definition RatFieldUnitMixin := GRing.ComRing_IsField.Build type mulV_l inv0.
 Canonical frac_unitRingType := Eval hnf in UnitRingType type RatFieldUnitMixin.
 Canonical frac_comUnitRingType := [comUnitRingType of type].
 
@@ -372,4 +368,5 @@ Qed.
 Lemma tofrac_eq0 (p : R): (p%:F == 0) = (p == 0).
 Proof. by rewrite tofrac_eq. Qed.
 End FracFieldTheory.
+ *)
  *)
