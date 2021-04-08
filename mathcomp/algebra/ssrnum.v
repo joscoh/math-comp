@@ -146,12 +146,12 @@ HB.mixin Record Zmodule_IsNormed d (R : POrderedZmodule.type d) T
   normrMn : forall x n, norm_op (x *+ n) = norm_op x *+ n;
   normrN : forall x, norm_op (- x) = norm_op x;
 }.
-#[mathcomp]
+#[mathcomp, infer(R)]
 HB.structure Definition NormedZmodule d (R : POrderedZmodule.type d) :=
   { T of Zmodule_IsNormed d R T & GRing.Zmodule T }.
 
-HB.mixin Record IsNumDomain d R
-         (R' : POrderedZmodule d R) of GRing.Ring R & @NormedZmodule d (POrderedZmodule.Pack R') R := {
+HB.mixin Record IsNumDomain d R of GRing.Ring R & POrderedZmodule d R
+   & NormedZmodule d R R := {
   (* _ : forall x y, 0 < x -> 0 < y -> 0 < (x + y); *)
   (* _ : forall x y, 0 <= x -> 0 <= y -> x <= y || y <= x; *)
   (* _ : {morph norm_op : x y / x * y}; *)
