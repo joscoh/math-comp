@@ -151,7 +151,7 @@ HB.structure Definition NormedZmodule d (R : POrderedZmodule.type d) :=
   { T of Zmodule_IsNormed d R T & GRing.Zmodule T }.
 
 HB.mixin Record IsNumDomain d R of GRing.Ring R & POrderedZmodule d R
-   & NormedZmodule d R R := {
+   & NormedZmodule d [the POrderedZmodule.type _ of R] R := {
   (* _ : forall x y, 0 < x -> 0 < y -> 0 < (x + y); *)
   (* _ : forall x y, 0 <= x -> 0 <= y -> x <= y || y <= x; *)
   (* _ : {morph norm_op : x y / x * y}; *)
