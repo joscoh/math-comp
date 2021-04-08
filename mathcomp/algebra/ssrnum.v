@@ -1,5 +1,6 @@
 (* (c) Copyright 2006-2016 Microsoft Corporation and Inria.                  *)
 (* Distributed under the terms of CeCILL-B.                                  *)
+From HB Require Import structures.
 From mathcomp Require Import ssreflect ssrfun ssrbool eqtype ssrnat seq choice.
 From mathcomp Require Import ssrAC div fintype path bigop order finset fingroup.
 From mathcomp Require Import ssralg poly.
@@ -127,11 +128,35 @@ Unset Printing Implicit Defensive.
 
 Local Open Scope order_scope.
 Local Open Scope ring_scope.
-Import Order.TTheory GRing.Theory.
+Import (* Order.TTheory *) GRing.Theory.
 
 Fact ring_display : unit. Proof. exact: tt. Qed.
 
 Module Num.
+
+#[mathcomp]
+HB.structure Definition POrderedZmodule d :=
+  { R of Order.IsPOrdered d R & GRing.Zmodule R }.
+
+HB.mixin Record Zmodule_IsNormed d (R : POrderedZmodule.type d) T
+         of GRing.Zmodule T := {
+  norm_op : T -> R;
+  ler_norm_add : forall x y, norm_op (x + y) <= norm_op x + norm_op y;
+  normr0_eq0 : forall x, norm_op x = 0 -> x = 0;
+  normrMn : forall x n, norm_op (x *+ n) = norm_op x *+ n;
+  normrN : forall x, norm_op (- x) = norm_op x;
+}.
+#[mathcomp]
+HB.structure Definition NormedZmodule d (R : POrderedZmodule.type d) :=
+  { T of Zmodule_IsNormed d R T & GRing.Zmodule T }.
+
+HB.mixin Record IsNumDomain d R
+         (R' : POrderedZmodule d R) of GRing.Ring R & @NormedZmodule d (POrderedZmodule.Pack R') R := {
+  (* _ : forall x y, 0 < x -> 0 < y -> 0 < (x + y); *)
+  (* _ : forall x y, 0 <= x -> 0 <= y -> x <= y || y <= x; *)
+  (* _ : {morph norm_op : x y / x * y}; *)
+  (* _ : forall x y, (x <= y) = (norm_op (y - x) == (y - x)); *)
+}.
 
 Record normed_mixin_of (R T : zmodType)
        (Rorder : Order.POrder.mixin_of (Equality.class R))
