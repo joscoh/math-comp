@@ -1808,18 +1808,21 @@ Proof. by move=> /leq_card; rewrite !card_ord. Qed.
 Arguments inj_leq [m n] f _.
 
 (* bijection between any finType T and the Ordinal finType of its cardinal *)
+
+Lemma enum_rank_subproof (T : finType) x0 (A : {pred T}) : x0 \in A -> 0 < #|A|.
+Proof. by move=> Ax0; rewrite (cardD1 x0) Ax0. Qed.
+
+HB.lock
+Definition enum_rank_in (T : finType) x0 (A : {pred T}) (Ax0 : x0 \in A) x :=
+  insubd (Ordinal (@enum_rank_subproof T x0 [eta A] Ax0)) (index x (enum A)).
+Canonical unlockable_enum_rank_in := Unlockable enum_rank_in.unlock.
+
 Section EnumRank.
 
 Variable T : finType.
 Implicit Type A : {pred T}.
-
-Lemma enum_rank_subproof x0 A : x0 \in A -> 0 < #|A|.
-Proof. by move=> Ax0; rewrite (cardD1 x0) Ax0. Qed.
-
-Definition enum_rank_in x0 A (Ax0 : x0 \in A) x :=
-  insubd (Ordinal (@enum_rank_subproof x0 [eta A] Ax0)) (index x (enum A)).
-
-Definition enum_rank x := @enum_rank_in x T (erefl true) x.
+  
+Definition enum_rank x := @enum_rank_in T x T (erefl true) x.
 
 Lemma enum_default A : 'I_(#|A|) -> T.
 Proof. by rewrite cardE; case: (enum A) => [|//] []. Qed.
@@ -1842,9 +1845,9 @@ Lemma nth_codom T' y0 (f : T -> T') (i : 'I_#|T|) :
 Proof. exact: nth_image. Qed.
 
 Lemma nth_enum_rank_in x00 x0 A Ax0 :
-  {in A, cancel (@enum_rank_in x0 A Ax0) (nth x00 (enum A))}.
+  {in A, cancel (@enum_rank_in T x0 A Ax0) (nth x00 (enum A))}.
 Proof.
-move=> x Ax; rewrite insubdK ?nth_index ?mem_enum //.
+move=> x Ax; rewrite enum_rank_in.unlock insubdK ?nth_index ?mem_enum //.
 by rewrite cardE [_ \in _]index_mem mem_enum.
 Qed.
 
@@ -1852,15 +1855,15 @@ Lemma nth_enum_rank x0 : cancel enum_rank (nth x0 (enum T)).
 Proof. by move=> x; apply: nth_enum_rank_in. Qed.
 
 Lemma enum_rankK_in x0 A Ax0 :
-   {in A, cancel (@enum_rank_in x0 A Ax0) enum_val}.
+   {in A, cancel (@enum_rank_in T x0 A Ax0) enum_val}.
 Proof. by move=> x; apply: nth_enum_rank_in. Qed.
 
 Lemma enum_rankK : cancel enum_rank enum_val.
 Proof. by move=> x; apply: enum_rankK_in. Qed.
 
-Lemma enum_valK_in x0 A Ax0 : cancel enum_val (@enum_rank_in x0 A Ax0).
+Lemma enum_valK_in x0 A Ax0 : cancel enum_val (@enum_rank_in T x0 A Ax0).
 Proof.
-move=> x; apply: ord_inj; rewrite insubdK; last first.
+move=> x; apply: ord_inj; rewrite enum_rank_in.unlock insubdK; last first.
   by rewrite cardE [_ \in _]index_mem mem_nth // -cardE.
 by rewrite index_uniq ?enum_uniq // -cardE.
 Qed.
@@ -1927,7 +1930,8 @@ Prenex Implicits enum_val enum_rank enum_valK enum_rankK.
 
 Lemma enum_rank_ord n i : enum_rank i = cast_ord (esym (card_ord n)) i.
 Proof.
-by apply: val_inj; rewrite insubdK ?index_enum_ord // card_ord [_ \in _]ltn_ord.
+apply: val_inj; rewrite /enum_rank enum_rank_in.unlock.
+by rewrite insubdK ?index_enum_ord // card_ord [_ \in _]ltn_ord.
 Qed.
 
 Lemma enum_val_ord n i : enum_val i = cast_ord (card_ord n) i.
