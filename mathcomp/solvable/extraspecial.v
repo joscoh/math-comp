@@ -179,9 +179,7 @@ rewrite mulG_subG -andbA; apply/and3P; split.
 rewrite mulgSS ?cycle_subG //= morphimEdom; apply/imsetP.
   by exists (0, 1)%R; rewrite ?inE //= mul1g.
 by exists 1%R; rewrite ?inE.
-Unset Kernel Term Sharing.
 Qed.
-Set Kernel Term Sharing.
 
 Lemma pX1p2_pgroup : p.-group p^{1+2}.
 Proof. by rewrite /pgroup card_pX1p2 pnatX pnat_id. Qed.
