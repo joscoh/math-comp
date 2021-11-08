@@ -1306,7 +1306,7 @@ Lemma irredp_FAdjoin (F : fieldType) (p : {poly F}) :
   {L : fieldExtType F & \dim {:L} = (size p).-1 &
     {z | root (map_poly (in_alg L) p) z & <<1; z>>%VS = fullv}}.
 Proof.
-case=> p_gt1 irr_p; set n := (size p).-1; pose vL := [vectType F of 'rV_n].
+case=> p_gt1 irr_p; set n := (size p).-1; pose vL := [the vectType F of 'rV_n].
 have Dn: n.+1 = size p := ltn_predK p_gt1.
 have nz_p: p != 0 by rewrite -size_poly_eq0 -Dn.
 suffices [L dimL [toPF [toL toPF_K toL_K]]]:
