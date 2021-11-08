@@ -1581,8 +1581,12 @@ End Absz.
 
 Module Export IntDist.
 
+(* This notation is supposed to work even if the ssrint library is not Imported.
+   Since we can't rely on the CS database to contain the zmodule instance on
+   int we put the instance by hand in the notation. *)
 Notation "m - n" :=
-  (@GRing.add _ (m%N : int) (@GRing.opp _ (n%N : int))) : distn_scope.
+  (@GRing.add [zmodType of int] (m%N : int)
+    (@GRing.opp [zmodType of int] (n%N : int))) : distn_scope.
 Arguments absz m%distn_scope.
 Notation "`| m |" := (absz m) : nat_scope.
 Coercion Posz : nat >-> int.
@@ -1648,7 +1652,7 @@ wlog le_m31 : m1 m3 / (m3 <= m1)%R.
   by rewrite (addrC `|_|)%R orbC !(distrC m1) !(distrC m3).
 rewrite ger0_norm ?subr_ge0 // orb_idl => [|/andP[le_m12 le_m23]]; last first.
   by have /eqP->: m2 == m3; rewrite ?lexx // eq_le le_m23 (le_trans le_m31).
-rewrite -{1}(subrK m2 m1) -addrA -subr_ge0 andbC -[X in X && _]subr_ge0.
+rewrite -{1}(subrK m2 m1) -(addrA _ m2) -subr_ge0 andbC -[X in X && _]subr_ge0.
 by apply: leif_add; apply/real_leif_norm/num_real.
 Qed.
 
