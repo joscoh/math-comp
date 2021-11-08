@@ -1584,9 +1584,10 @@ Module Export IntDist.
 (* This notation is supposed to work even if the ssrint library is not Imported.
    Since we can't rely on the CS database to contain the zmodule instance on
    int we put the instance by hand in the notation. *)
+Local Definition int_zmodType := [zmodType of int].
 Notation "m - n" :=
-  (@GRing.add [zmodType of int] (m%N : int)
-    (@GRing.opp [zmodType of int] (n%N : int))) : distn_scope.
+  (@GRing.add int_zmodType (m%N : int)
+    (@GRing.opp int_zmodType (n%N : int))) : distn_scope.
 Arguments absz m%distn_scope.
 Notation "`| m |" := (absz m) : nat_scope.
 Coercion Posz : nat >-> int.
