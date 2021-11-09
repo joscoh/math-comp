@@ -1188,7 +1188,7 @@ Local Notation groupT := (group_of (Phant gT)).
 Identity Coercion type_of_group : group_of >-> group_type.
 
 HB.instance Definition _ := [IsSUB for gval].
-HB.instance Definition _ := [Finite of group_type by <:].
+#[hnf] HB.instance Definition _ := [Finite of group_type by <:].
 
 (* No predType or baseFinGroupType structures, as these would hide the *)
 (* group-to-set coercion and thus spoil unification.                  *)
@@ -1662,7 +1662,7 @@ Inductive subg_of : predArgType := Subg x & x \in G.
 Definition sgval u := let: Subg x _ := u in x.
 Definition subg_of_SUB := Eval hnf in [IsSUB for sgval].
 HB.instance Definition _ := subg_of_SUB.
-HB.instance Definition _ := [Finite of subg_of by <:].
+#[hnf] HB.instance Definition _ := [Finite of subg_of by <:].
 
 Lemma subgP u : sgval u \in G.
 Proof. exact: valP. Qed.
