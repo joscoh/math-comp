@@ -5737,7 +5737,7 @@ move=> e f; have [tor rto] := GRing.to_rformP e f.
 exact: (iffP (sat_gen_form e (GRing.to_rform_rformula f))).
 Qed.
 
-HB.instance Definition _ := GRing.Field_IsDec.Build FA gen_satP.
+#[export] HB.instance Definition _ := GRing.Field_IsDec.Build FA gen_satP.
 
 End DecideGenField.
 
@@ -5749,8 +5749,8 @@ Variables (rG : mx_representation F G n) (A : 'M[F]_n).
 Hypotheses (irrG : mx_irreducible rG) (cGA : centgmx rG A).
 Notation FA := (gen_of irrG cGA).
 
-HB.instance Definition _ := [Finite of FA by <:].
-HB.instance Definition _ := [finGroupMixin of FA for +%R].
+#[export] HB.instance Definition _ := [Finite of FA by <:].
+#[export] HB.instance Definition _ := [finGroupMixin of FA for +%R].
 
 Lemma card_gen : #|{:FA}| = (#|F| ^ degree_mxminpoly A)%N.
 Proof. by rewrite card_sub card_matrix mul1n. Qed.
