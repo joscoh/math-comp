@@ -42,6 +42,7 @@ Definition ratz (n : int) := @Rat (n, 1) (coprimen1 _).
 
 Definition rat_IsSUB := Eval hnf in [IsSUB for valq].
 HB.instance Definition _ := rat_IsSUB.
+#[hnf] HB.instance Definition _ := [Equality of rat by <:].
 HB.instance Definition _ := [Countable of rat by <:].
 
 Definition numq x := nosimpl ((valq x).1).
@@ -788,3 +789,12 @@ by move=> p /eqP p_neq0; rat_to_ring; rewrite mulVf.
 Qed.
 
 Add Field rat_field : rat_field_theory.
+
+(* Fixme: ssrnum:
+  Hint Extern 0 (is_true (@Order.le ring_display _ _ _)) =>
+    (apply: ler01) : core.
+
+Example foo : (3%:R^-1 + 1) ^+ 2 <= 3%:Q.
+Time apply: ler01.
+Qed.
+*)
